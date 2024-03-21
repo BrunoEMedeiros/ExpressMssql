@@ -28,4 +28,27 @@ routes.post('/produto/novo', async (req, res)=>{
     }
 })
 
+routes.put('/produto/:id', async (req, res)=>{
+    try {
+        const { id } = req.params
+        const { descricao, preco } = req.body
+        await pool.query`update Produtos set descricao = ${descricao}, preco = ${preco} where id = ${id}`
+        return res.status(201).json('atualizado')
+    } catch (error) {
+        console.log(error)
+        return res.status(501).json('erro ao atualizar produto...')
+    }
+})
+
+routes.delete('/produto/:id', async (req, res)=>{
+    try {
+        const { id } = req.params
+        await pool.query`delete from Produtos where id = ${id}`
+        return res.status(200).json('excluido!')
+    } catch (error) {
+        console.log(error)
+        return res.status(501).json('erro ao excluir produto...')
+    }
+})
+
 export default routes
